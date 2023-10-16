@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <form onsubmit="submitFunction(event)">
+        <label for="name">Enter your name</label> 
+        <input type="text" id="name" name="name" required>
+        <label for="email">Enter email</label> 
+        <input type="text" id="email" name="email" required>
+        <label for="password">Enter password</label>
+        <input type="password" id="password" name="password" required>
+        <button type="submit" id="submit">Sign up</button>
+        <a href="abc.html" >Existing User - Login</a>
+    </form>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/1.5.1/axios.min.js"></script>
+    <script>
+        async function submitFunction(event){
+            preventDefault(event)
+            const name = document.getElementById('name').value
+            const email = document.getElementById('email').value
+            const password = document.getElementById('password').value
+
+            const obj = {
+                name,
+                email,
+                password
+            }
+
+            const data = await axios.post('http://localhost:3000/postSignupDetails', obj)
+            .then(result=>console.log(result))
+            .catch(err=>console.log(err))
+        }
+    </script>
+</body>
+</html>
