@@ -1,0 +1,18 @@
+const express = require('express')
+const sequelize = require('./util/database')
+const bodyParser = require('body-parser')
+const route = require('./routers/router')
+const cors = require('cors')
+
+const app = express()
+app.use(cors())
+app.use(bodyParser.urlencoded({extended:false}))
+app.use(bodyParser.json())
+
+app.use(route)
+sequelize.sync()
+.then(result=>{
+    app.listen(3000)
+    console.log('listening to port 3000 :)')
+})
+.catch(err=>console.log(err))
