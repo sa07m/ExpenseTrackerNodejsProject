@@ -31,19 +31,22 @@
                 email,
                 password
             }
-
-            const data = await axios.post('http://localhost:3000/postSignupDetails', obj)
-            .then(result=>{
-                if(result.data.length==0){
-                    document.body.innerHTML += '<h2 style="color: crimson;">Error - Request failed with statuc code:403</h2>'
-                }
-                else{
-                    // Redirect to the login page
+            try{
+                const data = await axios.post('http://localhost:3000/signup', obj)
+                if(data.status===200){
                     alert('User created successfully')
-                    window.location.href = 'login.html';
+                    window.location.href = 'login.html'
                 }
-            })
-            .catch(err=>console.log(err))
+            }
+            catch(error){
+                if(error.response.status===401){
+                    const errorMessage = error.response.data.error
+                    document.body.innerHTML += `<div style="color:red;">${errorMessage} </div>`
+                }
+                else
+                    console.log(error+'else block')
+
+            }
             document.getElementById('name').value = ''
             document.getElementById('email').value = ''
             document.getElementById('password').value = ''
