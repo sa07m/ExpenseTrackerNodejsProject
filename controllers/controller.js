@@ -39,7 +39,7 @@ exports.loginPage = (req, res, next) => {
             //res.json(result)
             if(password===result.password)
             {
-                res.json({message:'Valid user'})
+                res.status(200).json({message:'Valid user'})
             }
             else{
                 res.status(404).json({message:'Password did not match'})
