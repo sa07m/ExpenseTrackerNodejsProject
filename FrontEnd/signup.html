@@ -14,7 +14,7 @@
         <label for="password">Enter password</label>
         <input type="password" id="password" name="password" required>
         <button type="submit" id="submit">Sign up</button><br>
-        <a href="abc.html" >Existing User - Login</a>
+        <a href="login.html" >Existing User - Login</a>
     </form>
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/1.5.1/axios.min.js"></script>
@@ -38,7 +38,9 @@
                     document.body.innerHTML += '<h2 style="color: crimson;">Error - Request failed with statuc code:403</h2>'
                 }
                 else{
-                    console.log(result)
+                    // Redirect to the login page
+                    alert('User created successfully')
+                    window.location.href = 'login.html';
                 }
             })
             .catch(err=>console.log(err))
@@ -47,6 +49,8 @@
             document.getElementById('password').value = ''
 
         }
+
+
     </script>
 </body>
 </html>
