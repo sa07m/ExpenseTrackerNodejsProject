@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Document</title>
+</head>
+<body>
+    <form onsubmit="addExpense(event)">
+        <label for="amount">Enter Amount</label>
+        <input type="number" id="amount" name="amount" required>
+        <label for="desc">Description</label>
+        <input type="text" id="desc" name="desc" required>
+        <label for="cat">Category</label>
+        <select id="cat">
+            <option>Food</option>
+            <option>Shopping</option>
+            <option>petrol</option>
+            <option>Bills</option>
+        </select>
+        <button type="submit">Add Expense</button>
+        <div id="list"></div>
+    </form>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/1.5.1/axios.min.js"></script>
+    <script>
+        async function addExpense(event){
+            event.preventDefault()
+            const amount = document.getElementById('amount').value
+            const desc = document.getElementById('desc').value
+            const cat = document.getElementById('cat').value
+
+            const obj = {
+                amount,
+                desc,
+                cat
+            }
+            await axios.post('http://localhost:3000/postExpense', obj)
+            .then(result=>display(result.data))
+            .catch(err=>console.log(err))
+
+            document.getElementById('amount').value = ''
+            document.getElementById('desc').value = ''
+            document.getElementById('cat').value = ''
+
+        }
+
+        function display(obj){
+            const {id,amount, desc, cat} = obj
+            const list = document.getElementById('list')
+            const newEntry = document.createElement('p'); // Create a new paragraph element
+
+            newEntry.textContent = `${amount} - ${desc} - ${cat}`;
+            const deletebtn = document.createElement('input')
+            deletebtn.type='button'
+            deletebtn.value='DELETE'
+            newEntry.appendChild(deletebtn)
+
+            //newEntry.textContent = amount+ desc + cat
+            list.appendChild(newEntry)
+
+            deletebtn.onclick = async()=>{
+                const id = obj.id
+                const data =  axios.delete(`http://localhost:3000/deleteExpense/${obj.id}`)
+                .then(location.reload())
+                .catch(err=>console.log(err))
+
+            //     const id = `${obj.id}`
+            //     list.removeChild(newEntry)
+            // await axios.delete(`http://localhost:3000/deleteExpense/${obj.id}`)
+            // .then(result=>console.log('delete ss'))
+            // .catch(err=>console.log(err))
+            
+            }
+    }
+
+        window.addEventListener('DOMContentLoaded', async()=>{
+            const dbdata = await axios.get('http://localhost:3000/getExpense')
+            .then(result=> {
+                return result.data
+            })
+            .catch(err=>console.log(err))
+            if(dbdata.length === 0)
+                alert('no entries to display')
+            for(let i=0; i<dbdata.length; i++){
+                display(dbdata[i])
+            }
+        })
+            
+
+        
+    </script>
+</body>
+</html>

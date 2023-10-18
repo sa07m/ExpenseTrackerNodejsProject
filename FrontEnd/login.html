@@ -26,6 +26,7 @@
             await axios.post('http://localhost:3000/login-details',obj)
                 .then(result=>{
                     alert(result.data.message)
+                    window.location.href='addExpense.html'
                 })
             .catch(err=>{
                 console.log(JSON.stringify(err))
