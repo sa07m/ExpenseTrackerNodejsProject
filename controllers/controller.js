@@ -30,16 +30,11 @@ exports.signup = async (req, res, next) => {
           const saltRounds = 10;
           bcrypt.hash(password, saltRounds, async (err, hash) => {
             if (err) {
-            //   console.log(err);
-            //   return res.status(500).json({ error: 'Hashing error' });
                 throw new Error('Hashing error')
             }
       
             UserModel.create({ name, email, password: hash })
-            //   .then((result) => {
                 res.status(200).json({ message: 'Successfully created new user' });
-             // })
-            //  .catch((err) => res.status(500).json({ error: 'Database error' }));
           });
         } catch (e) {
           res.status(500).json({ error: 'Server error' });
@@ -62,6 +57,7 @@ exports.loginPage = async (req, res, next) => {
         })
         if(user){
             bcrypt.compare(password, user.password, (err, result)=>{
+            
                 if(err)
                     throw new Error('something')
                 if(result)
