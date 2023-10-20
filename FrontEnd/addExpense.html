@@ -35,7 +35,10 @@
                 desc,
                 cat
             }
-            await axios.post('http://localhost:3000/postExpense', obj,{ headers: { "Authorization": token } })
+            await axios.post('http://localhost:3000/postExpense', obj,{ 
+                headers: { 
+                    "Authorization": token 
+                } })
                 .then(result => display(result.data))
                 .catch(err => console.log(err))
 
@@ -63,7 +66,11 @@
             deletebtn.onclick = async () => {
                 try{
                 const id = obj.id
-                const data = await axios.delete(`http://localhost:3000/deleteExpense/${obj.id}`,{ headers: { "Authorization": token } })
+                const data = await axios.delete(`http://localhost:3000/deleteExpense/${obj.id}`,{ 
+                    headers: { 
+                        "Authorization": token 
+                    } 
+                })
                     location.reload()
                 }
                 catch(err){
@@ -81,19 +88,13 @@
 
         window.addEventListener('DOMContentLoaded', async () => {
            
-            const dbdata = await axios.get('http://localhost:3000/getExpense', { headers: { "Authorization": token } })
+            const dbdata = await axios.get('http://localhost:3000/getExpense', { 
+                headers: { 
+                    "Authorization": token 
+                } 
+            })
                 .then(result => {
-                    //     console.log('in then',result.data)
-                    //     return result.data
-                    // })
-                    // .catch(err => console.log(err))
                     
-                    // if(dbdata.length === 0)
-                    //     alert('no entries to display')
-                    // for(let i=0; i<dbdata.length; i++){
-                    //     console.log('in for loop')
-                    //     display(dbdata[i])
-                    // }
                     console.log(result.data)
                     result.data.data.forEach(expense => {
                         display(expense)
