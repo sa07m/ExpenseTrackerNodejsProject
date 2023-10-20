@@ -26,13 +26,14 @@
             await axios.post('http://localhost:3000/login-details',obj)
                 .then(result=>{
                     alert(result.data.message)
+                    localStorage.setItem('token', result.data.token)
                     window.location.href='addExpense.html'
                 })
-            .catch(err=>{
-                console.log(JSON.stringify(err))
-                document.body.innerHTML += `<div style="color:red;">${err.message} </div>`
-            
-            })
+                .catch(err=>{
+                    console.log(JSON.stringify(err))
+                    document.body.innerHTML += `<div style="color:red;">${err.message} </div>`
+                
+                })
         }
     </script>
 </body>
