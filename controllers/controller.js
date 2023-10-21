@@ -43,10 +43,10 @@ exports.signup = async (req, res, next) => {
         }
       }
     
-function generateAccessToken(id,name){
-    console.log(process.env.TOKEN_SECRET)
-    return jwt.sign({ id:id, name:name },'12456753211')
-}
+    function generateAccessToken(id,name,ispremiumuser){
+        console.log(process.env.TOKEN_SECRET)
+        return jwt.sign({ id:id, name:name, ispremiumuser },process.env.TOKEN_SECRET)
+    }
 
 exports.loginPage = async (req, res, next) => {
     try{
@@ -66,7 +66,7 @@ exports.loginPage = async (req, res, next) => {
                 if(err)
                     throw new Error('something')
                 if(result){
-                    const token = generateAccessToken(user.id, user.name);
+                    const token = generateAccessToken(user.id, user.name, user.ispremiumuser);
                     console.log('Generated Token:', token); // Log the generated token for debugging
                     res.status(200).json({ message: 'Valid user', token });
                 }
@@ -137,7 +137,8 @@ exports.getExpense = async (req, res, next) => {
     }
     
 }
-   
+
+
     
 
 
