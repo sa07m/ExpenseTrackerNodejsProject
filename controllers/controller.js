@@ -13,6 +13,7 @@ function isStringValid(string){
 
 exports.signup = async (req, res, next) => {
     try{
+        console.log('in controller signup')
         const {name,email,password} = req.body
         if(isStringValid(name) || isStringValid(email) || isStringValid(password)){
             return res.status(400).json({err:"Bad parameters. Something is missing"})
@@ -83,6 +84,7 @@ exports.loginPage = async (req, res, next) => {
 }
 
 exports.postExpense = (req, res, next) => {
+    console.log('in control post expense')
     const id = req.user.id
     console.log('getting user id',id)
     const {amount,desc,cat} = req.body

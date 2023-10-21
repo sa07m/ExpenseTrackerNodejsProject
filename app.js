@@ -6,7 +6,7 @@ const route = require('./routers/router')
 const cors = require('cors')
 const Expense = require('./models/expense')
 const User  = require('./models/user') 
-const Order = require('./models/user')
+const Order = require('./models/orders')
 
 const app = express()
 app.use(cors())
@@ -18,7 +18,9 @@ Expense.belongsTo(User)
 
 User.hasMany(Order)
 Order.belongsTo(User)
+
 app.use(route)
+
 sequelize.sync()
 .then(result=>{
     app.listen(3000)

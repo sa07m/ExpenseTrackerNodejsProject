@@ -123,14 +123,22 @@
                 },{ headers:{"Authorization":token}})
 
                 alert('You are a premium user')
+                document.getElementById('rzp-button1').style.display = 'none'
+                
             }
         }
         const rzp1 = new Razorpay(options)
         rzp1.open()
         e.preventDefault()
 
-        rzp1.on('payment.failed', function(response){
+        rzp1.on('payment.failed', async function(response){
             console.log(response)
+            
+            const resp = await axios.post('http://localhost:3000/purchase/failedTransactionStatus',{
+                    order_id:options.order_id
+                },{ headers:{"Authorization":token}})
+
+                console.log(resp)
             alert('something went wrong')
         })
     }
