@@ -23,7 +23,7 @@
                 password : document.getElementById('password').value
             }
                         
-            await axios.post('http://localhost:3000/login-details',obj)
+            await axios.post('http://localhost:3000/login',obj)
                 .then(result=>{
                     alert(result.data.message)
                     localStorage.setItem('token', result.data.token)

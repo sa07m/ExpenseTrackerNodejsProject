@@ -1,31 +1,36 @@
-const express = require('express')
 require('dotenv').config()
-const sequelize = require('./util/database')
-const bodyParser = require('body-parser')
-const route = require('./routers/router')
-const premiumroute = require('./routers/premiumFeatures')
-const cors = require('cors')
-const Expense = require('./models/expense')
-const User  = require('./models/user') 
-const Order = require('./models/orders')
+const express = require('express');
 
-const app = express()
-app.use(cors())
-app.use(bodyParser.urlencoded({extended:false}))
-app.use(bodyParser.json())
+const cors = require('cors');
 
-User.hasMany(Expense)
-Expense.belongsTo(User)
+const sequelize = require('./util/database');
+const authroutes = require('./routes/authroutes');
+const expenseroutes = require('./routes/expenseroutes');
+const purchaseroutes = require('./routes/purchase');
+const premiumroutes = require('./routes/premium');
+const User = require('./models/user');
+const Order = require('./models/orders');
+const Expenses = require('./models/expenses');
 
-User.hasMany(Order)
-Order.belongsTo(User)
 
-app.use(route)
-app.use(premiumroute)
+
+const app = express();
+app.use(express.json());
+app.use(cors());
+
+app.use(authroutes);
+app.use(expenseroutes);
+app.use(purchaseroutes);
+app.use(premiumroutes);
+
+User.hasMany(Expenses);
+Expenses.belongsTo(User);
+User.hasMany(Order);
+Order.belongsTo(User);
 
 sequelize.sync()
-.then(result=>{
-    app.listen(3000)
-    console.log('listening to port 3000 :)')
+.then(()=>{
+    app.listen(3000);
 })
-.catch(err=>console.log(err))
+.catch(err=> console.log(err));
+

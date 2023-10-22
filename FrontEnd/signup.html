@@ -33,13 +33,13 @@
             }
             try{
                 const data = await axios.post('http://localhost:3000/signup', obj)
-                if(data.status===200){
+                if(data.status===201){
                     alert('User created successfully')
                     window.location.href = 'login.html'
                 }
             }
             catch(error){
-                if(error.response.status===401){
+                if(error.response.status===403){
                     const errorMessage = error.response.data.error
                     document.body.innerHTML += `<div style="color:red;">${errorMessage} </div>`
                 }
