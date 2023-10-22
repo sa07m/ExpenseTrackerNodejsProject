@@ -179,11 +179,8 @@
             var leaderboardElem = document.getElementById('leaderboard')
             leaderboardElem.innerHTML +='<h1> Leader Board</h1>'
             userLeaderBoardArray.data.forEach((userDetails)=>{
-                // for(let i=1;i<userLeaderBoardArray.data.length+1; i++){
-                //     console.log('in for loop')
-                //     leaderboardElem.innerHTML+=`<li>Name - ${userLeaderBoardArray.data[i].name} Total Expense - ${userLeaderBoardArray.data[i].total_cost}`
-                // }
-                leaderboardElem.innerHTML+=`<li>Name - ${userDetails.name} Total Expense - ${userDetails.total_cost|| 0}</li>`
+            
+                leaderboardElem.innerHTML+=`<li>Name - ${userDetails.name} Total Expense - ${userDetails.totalexpenses|| 0}</li>`
             })
         }
         document.getElementById('message').appendChild(inputElement)
