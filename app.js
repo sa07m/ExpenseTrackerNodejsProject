@@ -3,6 +3,7 @@ require('dotenv').config()
 const sequelize = require('./util/database')
 const bodyParser = require('body-parser')
 const route = require('./routers/router')
+const premiumroute = require('./routers/premiumFeatures')
 const cors = require('cors')
 const Expense = require('./models/expense')
 const User  = require('./models/user') 
@@ -20,6 +21,7 @@ User.hasMany(Order)
 Order.belongsTo(User)
 
 app.use(route)
+app.use(premiumroute)
 
 sequelize.sync()
 .then(result=>{
