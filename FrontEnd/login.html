@@ -12,7 +12,7 @@
         <label for="password">Enter password</label>
         <input type="password" id="password" name="password" required>
         <button type="submit">Login</button><br>
-        <a href="signup.html" >New User - SignUp</a>
+        <a href="/" >New User - SignUp</a>
     </form>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/1.5.1/axios.min.js"></script>
     <script>
@@ -27,7 +27,7 @@
                 .then(result=>{
                     alert(result.data.message)
                     localStorage.setItem('token', result.data.token)
-                    window.location.href='addExpense.html'
+                    window.location.href='/app'
                 })
                 .catch(err=>{
                     console.log(JSON.stringify(err))

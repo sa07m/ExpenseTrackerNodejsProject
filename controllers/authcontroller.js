@@ -4,7 +4,9 @@ const bcrypt =  require('bcrypt');
 const jwt = require('jsonwebtoken');
 
 
-
+exports.loginpage = (req,res,next)=>{
+    res.sendFile(path.join(__dirname,  '../FrontEnd/login.html'));
+}
 exports.home = (req,res,next)=>{
     res.sendFile(path.join(__dirname,  '../FrontEnd/signup.html'));
 }

@@ -15,7 +15,7 @@
         <input type="password" id="password" name="password" required>
         <button type="submit" id="submit">Sign up</button><br>
         <button  id="forgotbtn" >Forgot Password</button>
-        <a href="login.html" >Existing User - Login</a>
+        <a href="/loginpage" >Existing User - Login</a>
     </form>
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/1.5.1/axios.min.js"></script>
@@ -36,7 +36,7 @@
                 const data = await axios.post('http://localhost:3000/signup', obj)
                 if(data.status===201){
                     alert('User created successfully')
-                    window.location.href = 'login.html'
+                    window.location.href = '/loginpage'
                 }
             }
             catch(error){
@@ -56,7 +56,7 @@
         }
         document.getElementById('forgotbtn').addEventListener('click', async function (event) {
             event.preventDefault();
-            window.location.href='forgotpassword.html';  
+            window.location.href='/forgotpassword';  
         });
 
 

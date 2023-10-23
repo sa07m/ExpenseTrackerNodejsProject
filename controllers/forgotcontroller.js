@@ -15,9 +15,11 @@ const sender = {
 }
 
 const path = require('path');
-// exports.home = (req,res,next)=>{
-//     res.sendFile(path.join(__dirname,  '../forgotpassword.html'));
-// }
+
+
+exports.forgot = (req,res,next)=>{
+    res.sendFile(path.join(__dirname,  '../FrontEnd/forgotpassword.html'));
+}
 
 exports.forgotpassword = async (req,res,next)=>{
     try{
@@ -67,6 +69,7 @@ exports.updatepassword = async(req,res,next)=>{
         if(users[0]){
             bcrypt.hash(password , 10 , async ( err , hash)=>{
                 await users[0].update({password: hash});
+                console.log('sending update')
                 res.status(201).json({message : 'password changed  successfully'})
             })
         }else{
@@ -76,4 +79,8 @@ exports.updatepassword = async(req,res,next)=>{
     console.log(err);
     res.status(500).json({error : err});
     }
+}
+
+exports.loginpage = (req,res)=>{
+    res.sendFile(path.join(__dirname,  '../FrontEnd/resetpassword.html'))
 }

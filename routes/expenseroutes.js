@@ -4,7 +4,8 @@ const expenseController = require('../controllers/expensecontroller');
 
 const router = express.Router();
 
-//router.get('/app',expenseController.app);
+router.get('/app',expenseController.app);
+
 
 router.post('/expenses', authmiddleware.authenticate , expenseController.postExpense);
 

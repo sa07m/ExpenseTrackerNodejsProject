@@ -76,3 +76,7 @@ exports.deleteExpense = async (req, res, next) => {
         console.log(e)
     }  
 }
+
+exports.app = (req,res,next)=>{
+    res.sendFile(path.join(__dirname,  '../FrontEnd/addExpense.html'));
+}
