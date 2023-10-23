@@ -54,12 +54,13 @@
         }
 
         function display(obj) {
-            
+            console.log('in display',obj)
             const { userId, amount, description, category } = obj
             const list = document.getElementById('list')
             const newEntry = document.createElement('p'); // Create a new paragraph element
 
             newEntry.textContent = `${amount} - ${description} - ${category}`;
+           
             const deletebtn = document.createElement('input')
             deletebtn.type = 'button'
             deletebtn.value = 'DELETE'

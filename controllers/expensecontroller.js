@@ -1,32 +1,35 @@
 const Expense = require('../models/expenses');
 const User = require('../models/user')
+const sequelize = require('../util/database')
 
 const path = require('path');
 
-exports.postExpense =(req,res,next)=>{
+exports.postExpense = async (req,res,next)=>{
+    const t = await sequelize.transaction()
+    try{
     console.log('in post expense controller')
     const userId = req.user.id ; 
     const amount = req.body.amount;
     const description = req.body.description;
     const category = req.body.category;
-    Expense.create({amount : amount , description : description , category : category , userId : userId})
-    .then((expense)=>{
-        const totalExpense = Number(req.user.totalexpenses) + Number(amount) ;
-        User.update({totalexpenses : totalExpense } , { where : { id : req.user.id}})
-        .then(()=>{
-            res.status(200).json({expense:expense})
-        })
-        .catch(err=>{
-            throw new Error(err);
-        })
-    })
-    .catch(err => {
-        throw new Error(err);
-    })
-    .catch(err=>{
+    const expense = await Expense.create({amount, description, category, userId},{transaction:t})
+    const totalExpense = Number(req.user.totalexpenses) + Number(amount) ;
+    await User.update({totalexpenses : totalExpense } , {
+             where : { id : req.user.id},
+             transaction:t
+            })
+            t.commit()
+            console.log('commit')
+            //console.log('in then',expense)
+            res.status(200).json(expense)       
+    }
+    
+    catch(err){
         console.log(err);
+        t.rollback();
+        console.log('rollback')
         return res.status(500).json({success:false , error : err});
-    });
+    };
 }
 
 exports.getExpense = (req,res,next)=>{
@@ -41,22 +44,35 @@ exports.getExpense = (req,res,next)=>{
 }
 
 exports.deleteExpense = async (req, res, next) => {
+    const t = await sequelize.transaction()
     try{
-        const id = req.params.id
-        
+        const id = req.params.id        
         console.log('expense id params',id)
-
-        await Expense.destroy({
+        const expense = await Expense.findAll({
             where:{
                 id:id,
-                userId:req.user.id
-            }
+                userId:req.user.id               
+            },
+            transaction:t
         })
-        .then(result=>res.json('delete'))
-        .catch(err=>console.log(err))
+        const totalExpense = Number(req.user.totalexpenses) - Number(expense[0].amount) ;
+        await User.update({totalexpenses : totalExpense } , {
+            where : { id : req.user.id},
+            transaction:t
+           })
+           await expense[0].destroy();
+           t.commit()
+           console.log('commit')
+           //console.log('in then',expense)
+           res.status(200).json(expense)   
+
+        //.then(result=>res.json('delete'))
+       
         console.log('entry deleted')
     }
     catch(e){
+        await t.rollback()
+        console.log('rollback')
         console.log(e)
     }  
 }
