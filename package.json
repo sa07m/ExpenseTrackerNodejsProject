@@ -1,7 +1,6 @@
 {
   "name": "expensetrackernodejsproject",
   "version": "1.0.0",
-  "description": "",
   "main": "app.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
@@ -21,6 +20,9 @@
     "jsonwebtoken": "^9.0.2",
     "mysql2": "^3.6.2",
     "razorpay": "^2.9.2",
-    "sequelize": "^6.33.0"
-  }
+    "sequelize": "^6.33.0",
+    "sib-api-v3-sdk": "^8.5.0"
+  },
+  "keywords": [],
+  "description": ""
 }

@@ -14,6 +14,7 @@
         <label for="password">Enter password</label>
         <input type="password" id="password" name="password" required>
         <button type="submit" id="submit">Sign up</button><br>
+        <button  id="forgotbtn" >Forgot Password</button>
         <a href="login.html" >Existing User - Login</a>
     </form>
 
@@ -53,6 +54,10 @@
             document.getElementById('password').value = ''
 
         }
+        document.getElementById('forgotbtn').addEventListener('click', async function (event) {
+            event.preventDefault();
+            window.location.href='forgotpassword.html';  
+        });
 
 
     </script>
