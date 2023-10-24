@@ -33,18 +33,21 @@ exports.postExpense = async (req,res,next)=>{
 }
 
 exports.getExpense = (req, res, next) => {
-    const itemsPerPage = 10;
+    
+    const limit = parseInt(req.query.limit) || 10;
     const currentPage = parseInt(req.query.page) || 1;
-    const offset = (currentPage - 1) * itemsPerPage;
+    const offset = (currentPage - 1) * limit;
+    
 
     Expense.findAndCountAll({
         where: { userId: req.user.id },
+        order: [['createdAt', 'DESC']],
         offset,
-        limit: itemsPerPage
+        limit
     })
-        .then(async result => {
+        .then( result => {
             const totalItems = result.count;
-            const totalPages = Math.ceil(totalItems / itemsPerPage);
+            const totalPages = Math.ceil(totalItems / limit);
 
             // const hasNextPage = currentPage < totalPages;
             // const hasPreviousPage = currentPage > 1;
@@ -58,42 +61,6 @@ exports.getExpense = (req, res, next) => {
 }
 
 
-// exports.getExpense = (req,res,next)=>{
-
-//     const itemsParPage = 2;
-//     //const of = ((req.query.page || 1) - 1);
-//     const currentPage = parseInt(req.query.page) || 1;
-//     console.log(of, '63 PER OFF HAI ');
-//     Expense.findAll({
-//         where: { userId: req.user.id },
-//         offset: of * itemsParPage,
-//         limit: itemsParPage
-//     })
-    
-//         .then(async result => {
-//             let pre; let nex; let prev; let nextv;
-//             if (of === 0) {
-//                 pre = false;
-//             } else {
-//                 pre = true;
-//                 prev = of;
-//             }
-//             const ans = await nextt(req.user.id, (of + 1) * itemsParPage, itemsParPage);
-//             if (ans === true) {
-//                 nex = true;
-//                 nextv = Number(of) + Number(2);
-//             } else {
-//                 nex = false;
-//             }
-//             console.log(prev, 'PREVIOUSBUTTON');
-//             console.log(pre, 'PREBUTTON');
-//             // console.log(nex, 'nexIOUSBUTTON');
-//             // console.log(nextv, 'nextvOUSBUTTON');
-//             // console.log(result, 'resuyltyBUTTON');
-//             console.log(result,'RESULT IN BUTTONS OF GET');
-//             res.json({ result, pre, nex, nextv, prev })
-//         }).catch(err=> console.log(err));
-// }
 
 exports.deleteExpense = async (req, res, next) => {
     const t = await sequelize.transaction()
