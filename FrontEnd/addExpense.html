@@ -20,43 +20,94 @@
             <option>Bills</option>
         </select>
         <button type="submit">Add Expense</button><br>
-        <div id="list"></div>
+
     </form>
+    <div id="list"></div>
+    <div id="pagination"></div>
     <div id="message"></div>
     <div id="leaderboard"></div>
     <button id="rzp-button1">Buy Premium</button>
     <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/1.5.1/axios.min.js"></script>
     <script>
+        let currentPage = 1;
+        const expensesPerPage = 10;
+
         const token = localStorage.getItem('token')
         async function addExpense(event) {
-            event.preventDefault()
-            const amount = document.getElementById('amount').value
-            const description = document.getElementById('desc').value
-            const category = document.getElementById('cat').value
+            event.preventDefault();
+            const amount = document.getElementById('amount').value;
+            const description = document.getElementById('desc').value;
+            const category = document.getElementById('cat').value;
 
             const obj = {
                 amount,
                 description,
                 category
+            };
+            console.log('obj', obj);
+            try {
+                const result = await axios.post('http://localhost:3000/expenses', obj, {
+                    headers: {
+                        "Authorization": token
+                    }
+                });
+               // display(result.data); // Display the new expense immediately
+                
+                document.getElementById('amount').value = '';
+                document.getElementById('desc').value = '';
+                document.getElementById('cat').value = '';
+                await refreshExpenseList(); // Refresh the expense list after adding the new expense
+            } catch (err) {
+                console.log(err);
             }
-            console.log('obj', obj)
-            await axios.post('http://localhost:3000/expenses', obj, {
+        }
+
+
+
+
+
+        async function refreshExpenseList() {
+            console.log('refresh called')
+            const dbdata = await axios.get('http://localhost:3000/expenses', {
+                params: {
+                    page: currentPage, // Send the current page as a parameter to the server
+                },
                 headers: {
                     "Authorization": token
                 }
-            })
-                .then(result => display(result.data))
-                .catch(err => console.log(err))
+            });
 
-            document.getElementById('amount').value = ''
-            document.getElementById('desc').value = ''
-            document.getElementById('cat').value = ''
+            // Clear the existing list and pagination
+            const list = document.getElementById('list');
+            list.innerHTML = '';
 
+            dbdata.data.expenses.forEach(expense => {
+                display(expense);
+            });
+
+            updatePagination(dbdata.data.totalPages);
+        }
+
+        function updatePagination(totalPages) {
+            const pagination = document.getElementById('pagination');
+            pagination.innerHTML = '';
+
+            for (let page = 1; page <= totalPages; page++) {
+                const pageButton = document.createElement('button');
+                pageButton.textContent = page;
+
+                pageButton.onclick = () => {
+                    currentPage = page;
+                    refreshExpenseList();
+                };
+
+                pagination.appendChild(pageButton);
+            }
         }
 
         function display(obj) {
-            console.log('in display', obj)
+            console.log('in display')
             const { userId, amount, description, category } = obj
             const list = document.getElementById('list')
             const newEntry = document.createElement('p'); // Create a new paragraph element
@@ -80,6 +131,8 @@
                             "Authorization": token
                         }
                     })
+                    //
+                    //list.removeChild(newEntry);
                     location.reload()
                 }
                 catch (err) {
@@ -103,6 +156,8 @@
         }
 
         window.addEventListener('DOMContentLoaded', async () => {
+
+
             console.log('in window load')
             const decodeToken = parseJwt(token)
             console.log(decodeToken)
@@ -116,15 +171,16 @@
                     "Authorization": token
                 }
             })
-                .then(result => {
+            // .then(result => {
 
-                    console.log(result.data)
-                    result.data.forEach(expense => {
-                        display(expense)
+            //     console.log(result.data)
+            //     result.data.forEach(expense => {
+            //         display(expense)
 
-                    })
+            //     })
 
-                })
+            // })
+            await refreshExpenseList();
 
         })
         document.getElementById('rzp-button1').onclick = async function (e) {
