@@ -39,6 +39,7 @@ forGotPassword.belongsTo(User);
 sequelize.sync()
 .then(()=>{
     app.listen(process.env.PORT||3000);
+    console.log('listening to 3000')
 })
 .catch(err=> console.log(err));
 

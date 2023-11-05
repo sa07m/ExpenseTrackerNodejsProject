@@ -24,10 +24,15 @@ exports.showleaderboard = async (req,res,next)=>{
 
 exports.download = async(req,res,next)=>{
     try{
+    
         const userid = req.user.id ;
+      
         const expenses = await UserServices.getExpenses(req);
+        
         const stringifiedExpenses = JSON.stringify(expenses);
+        // Create a unique filename for the text file based on the user's ID and the current date.
         const filename =`Expenses${userid}/${new Date()}.txt`;
+        // Upload the stringified expenses to an S3 storage service, and get the file URL.
         const fileUrl = await S3services.uploadtoS3(stringifiedExpenses,filename);
         res.status(200).json({fileUrl , success : true});
     }catch(err){

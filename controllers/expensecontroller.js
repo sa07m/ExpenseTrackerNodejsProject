@@ -49,9 +49,6 @@ exports.getExpense = (req, res, next) => {
             const totalItems = result.count;
             const totalPages = Math.ceil(totalItems / limit);
 
-            // const hasNextPage = currentPage < totalPages;
-            // const hasPreviousPage = currentPage > 1;
-
             res.json({
                 expenses: result.rows,
                 totalPages,
